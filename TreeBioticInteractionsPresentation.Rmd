@@ -6,7 +6,7 @@ institute: "University of Leeds"
 date: "25/08/2021 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
-    css: ["custom.css", "custom-fonts.css"]
+    css: ["ninjutsu", "custom.css", "custom-fonts.css"]
     lib_dir: libs
     nature:
       highlightStyle: github
@@ -28,8 +28,33 @@ options(htmltools.dir.version = FALSE)
 
 class: center, middle
 
-```{r echo=FALSE, out.width = "40%", eval=TRUE}
-knitr::include_graphics("Images/oakartichoke.jpeg")
+.pull-left[
+![Picea sitchensis](Images/Picea sitchensis.JPG)
+]
+
+.pull-right[
+![Polytrichum juniperinum](Images/Polytrichum juniperinum.JPG)
+]
+
+---
+
+class: center, middle
+
+.pull-left[
+![Brachythecium rutabulum](Images/Brachythecium rutabulum.JPG)
+]
+
+.pull-right[
+![Leucobryum glaucum](Images/Leucobryum glaucum.JPG)
+]
+
+---
+
+```{r oak_epi, echo=FALSE}
+
+knitr::include_graphics(path = "Images/Oak with Epiphytes.JPG")
+
+
 ```
 
 ---

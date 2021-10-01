@@ -50,7 +50,9 @@ class: center, middle
 
 ---
 
-```{r oak_epi, echo=FALSE}
+class: center, middle
+
+```{r oak_epi, echo=FALSE, out.width = "800px"}
 
 knitr::include_graphics(path = "Images/Oak with Epiphytes.JPG")
 

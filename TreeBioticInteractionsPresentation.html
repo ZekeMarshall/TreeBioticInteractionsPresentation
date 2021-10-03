@@ -4,10 +4,19 @@
     <title>The Trees of the British Isles and their Biotic Interactions</title>
     <meta charset="utf-8" />
     <meta name="author" content="Zeke Marshall" />
+    <meta name="date" content="2021-10-03" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/ninjutsu.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-progressBar/progress-bar.js"></script>
     <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <link href="libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/datatables-binding/datatables.js"></script>
+    <script src="libs/jquery/jquery-3.6.0.min.js"></script>
+    <link href="libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/dt-core/js/jquery.dataTables.min.js"></script>
+    <link href="libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk/js/crosstalk.min.js"></script>
     <script src="libs/pymjs/pym.v1.js"></script>
     <script src="libs/widgetframe-binding/widgetframe.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
@@ -20,7 +29,7 @@ class: center, middle, inverse, title-slide
 # The Trees of the British Isles and their Biotic Interactions
 ### Zeke Marshall
 ### University of Leeds
-### 25/08/2021 (updated: 2021-10-01)
+### 2021-10-03
 
 ---
 
@@ -48,6 +57,39 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
+---
+
+## Aim
+
+* Identify what organisms are associated with each native tree and 
+other introduced trees
+
+* Investigate whether the number of organisms associated with each tree is
+correlated to the length of time that species has been present in Britain.
+
+---
+
+## Inspiration
+
+.pull-left[
+![Birks_1980](Images/Birks_1980.PNG)
+]
+
+.pull-right[
+![Southwood_1961](Images/Southwood_1961.PNG)
+]
+
+---
+
+## Relevance
+
+* Help assess the biodiversity value of native vs non-native woodlands.
+
+* How can human-modified ecosystems be designed to conserve species.
+
+* 
 
 ---
 
@@ -81,17 +123,54 @@ class: center, middle
 
 ---
 
+## Associated Species
+
+<div id="htmlwidget-123db1c8960383f8798a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-123db1c8960383f8798a">{"x":{"filter":"none","vertical":false,"fillContainer":false,"data":[["Abies alba","Abies amabilis","Abies grandis","Abies nordmanniana","Abies procera","Acer campestre","Acer macrophyllum","Acer platanoides","Acer pseudoplatanus","Aesculus hippocastanum","Alnus cordata","Alnus glutinosa","Alnus incana","Alnus rubra","Araucaria araucana","Arbutus unedo","Betula pendula","Betula pubescens","Buxus sempervirens","Carpinus betulus","Castanea sativa","Cedrus libani","Chamaecyparis lawsoniana","Cornus sanguinea","Corylus avellana","Crataegus laevigata","Crataegus monogyna","Cryptomeria japonica","Eucalyptus gunnii","Eucalyptus nitens","Euonymus europaeus","Fagus sylvatica","Frangula alnus","Fraxinus excelsior","Hippophae rhamnoides","Ilex aquifolium","Juglans nigra","Juglans regia","Juniperus communis","Larix decidua","Larix kaempferi","Ligustrum vulgare","Malus sylvestris","Nothofagus alpina","Nothofagus obliqua","Picea abies","Picea omorika","Picea sitchensis","Pinus contorta","Pinus nigra","Pinus peuce","Pinus pinaster","Pinus radiata","Pinus strobus","Pinus sylvestris","Populus alba","Populus nigra","Populus tremula","Prunus avium","Prunus cerasifera","Prunus cerasus","Prunus domestica","Prunus padus","Prunus spinosa","Pseudotsuga menziesii","Pyrus communis","Quercus cerris","Quercus ilex","Quercus petraea","Quercus robur","Quercus rubra","Rhamnus cathartica","Salix caprea","Salix cinerea","Salix pentandra","Salix phylicifolia","Sambucus nigra","Sequoia sempervirens","Sequoiadendron giganteum","Sorbus aria","Sorbus aucuparia","Sorbus domestica","Sorbus torminalis","Taxus baccata","Thuja plicata","Tilia cordata","Tilia platyphyllos","Tsuga heterophylla","Ulmus glabra","Ulmus minor","Viburnum lantana","Viburnum opulus"],[64,10,15,null,4,331,22,225,697,282,null,583,6,27,null,null,332,330,71,211,304,null,1,1,671,null,220,null,null,null,67,682,null,959,null,460,120,211,321,147,1,60,265,null,null,7,null,20,23,null,null,2,1,4,306,1,51,479,192,null,null,2,124,233,59,3,134,72,742,739,7,null,1,null,null,null,349,2,18,150,599,null,null,127,28,1,222,18,375,null,null,null],[339,47,224,4,25,735,151,91,735,259,38,1684,220,170,16,33,1599,876,179,954,479,5,31,96,2250,58,946,19,3,7,125,3744,58,2254,50,980,222,246,134,235,24,163,587,2,5,243,1,154,230,103,5,29,105,36,2355,69,303,882,355,11,106,73,216,580,460,140,76,71,1622,2552,263,50,523,301,61,9,662,65,10,188,856,13,90,890,134,433,380,165,781,38,43,95],[4,null,null,null,null,81,2,42,95,25,5,129,null,null,null,null,67,85,1,58,25,null,null,null,99,null,41,null,null,null,21,87,10,144,null,36,36,64,null,10,null,22,58,null,null,55,null,null,null,null,null,null,null,null,51,null,6,76,26,null,null,null,7,54,9,21,33,null,230,231,32,26,54,54,null,null,92,null,null,31,75,null,15,15,1,55,24,1,75,null,null,null],[1,null,null,1,1,15,null,2,21,3,2,24,1,null,null,17,19,15,null,24,22,null,null,46,4,34,56,1,null,null,41,33,37,27,null,39,1,3,33,5,null,42,27,null,null,31,null,3,1,null,null,1,null,2,30,null,2,17,35,null,1,36,38,43,25,29,16,1,34,41,7,39,null,null,null,null,59,null,null,43,54,14,30,47,1,27,2,9,19,null,36,42],[15,null,null,null,null,19,null,3,20,19,14,17,null,null,null,3,14,15,null,19,10,null,null,4,11,null,14,null,null,null,5,26,8,30,null,25,13,13,3,17,null,5,26,null,null,11,null,null,null,null,null,null,null,null,24,null,14,14,15,null,null,2,3,13,9,null,24,null,43,43,24,2,6,6,null,null,13,null,null,19,31,3,25,12,16,16,17,1,22,null,3,4],[47,2,10,3,8,248,4,83,253,83,49,376,51,10,null,6,360,296,9,297,237,3,9,42,227,14,163,1,null,null,18,493,28,471,17,150,39,50,36,61,18,65,345,null,null,244,6,35,28,21,null,11,5,4,327,49,145,394,241,9,41,115,112,231,145,101,338,39,852,1222,244,35,284,162,31,37,58,1,null,186,284,1,175,144,122,272,190,121,268,11,17,20]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Species<\/th>\n      <th>Lichen<\/th>\n      <th>Fungi<\/th>\n      <th>Bryophytes<\/th>\n      <th>Birds<\/th>\n      <th>Mammals<\/th>\n      <th>Invertebrates<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":9,"columnDefs":[{"className":"dt-center","targets":"_all"}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[9,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+
+
+---
+
 ## The Species-Time Relationship
 
-<div id="htmlwidget-d934eaa6c07be23383c9" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d934eaa6c07be23383c9">{"x":{"url":"TreeBioticInteractionsPresentation_files/figure-html//widgets/widget_unnamed-chunk-1.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c3eff0c6460e14d6aa96" style="width:100%;height:500px;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c3eff0c6460e14d6aa96">{"x":{"url":"TreeBioticInteractionsPresentation_files/figure-html//widgets/widget_species_time.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
 
 
 ---
 
----
+class: center, middle
+
+&lt;img src="Images/Cormus domestica.jpeg" height="600px" /&gt;
 
 ---
+
+## Biotic Interaction Classification
+
+---
+
+## Source Analysis
+
+---
+
+## Phenology
+
+---
+
+## Next steps
+
+* Attempt to get the authors of each of the datasets I have used to upload their
+data to GloBI.
+
+* Create a set of observation fields in iNaturalist which correspond directly to 
+the .....
+
+* Collate information from 'low-hanging fruits' in the literature (e.g. the BES
+Biological Flora of the British Isles Papers) for inclusion in GloBI.
+
+---
+
+## References
 
 ---
     </textarea>

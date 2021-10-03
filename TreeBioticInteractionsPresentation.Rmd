@@ -3,7 +3,7 @@ title: "The Trees of the British Isles and their Biotic Interactions"
 subtitle: ""
 author: "Zeke Marshall"
 institute: "University of Leeds"
-date: "25/08/2021 (updated: `r Sys.Date()`)"
+date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     css: ["ninjutsu", "custom.css", "custom-fonts.css"]
@@ -23,6 +23,39 @@ xaringanExtra::use_progress_bar(color = "#415E3E", location = "top")
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 ```
+
+
+---
+
+## Aim
+
+* Identify what organisms are associated with each native tree and 
+other introduced trees
+
+* Investigate whether the number of organisms associated with each tree is
+correlated to the length of time that species has been present in Britain.
+
+---
+
+## Inspiration
+
+.pull-left[
+![Birks_1980](Images/Birks_1980.PNG)
+]
+
+.pull-right[
+![Southwood_1961](Images/Southwood_1961.PNG)
+]
+
+---
+
+## Relevance
+
+* Help assess the biodiversity value of native vs non-native woodlands.
+
+* How can human-modified ecosystems be designed to conserve species.
+
+* 
 
 ---
 
@@ -61,18 +94,43 @@ knitr::include_graphics(path = "Images/Oak with Epiphytes.JPG")
 
 ---
 
+## Associated Species
+
+```{r assoc_spp, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, out.width = "100%"}
+
+data <- read.csv("Output_Data/species_time_data.csv")
+
+data_t <- data |> 
+  dplyr::select(-Growing_Time, -Tree_group) |> 
+  tidyr::pivot_wider(id_cols = c(Species), values_from = Associated_Species, names_from = Taxon_group)
+
+DT::datatable(
+  data_t,
+  fillContainer = FALSE, 
+  rownames = FALSE,
+  options = list(
+    pageLength = 9,
+    columnDefs = list(list(className = 'dt-center', targets="_all"))
+    )
+)
+
+```
+
+
+---
+
 ## The Species-Time Relationship
 
-```{r, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
+```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
 
 data <- read.csv("Output_Data/species_time_data.csv") |> 
   dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
 
 foo <- ggplot2::ggplot(data,
                        mapping = ggplot2::aes(x = Growing_Time,
-                                             y = Associated_Species,
-                                             color = Tree_group,
-                                             label = Species)) +
+                                              y = Associated_Species,
+                                              color = Tree_group,
+                                              label = Species)) +
   ggplot2::geom_point() +
   ggplot2::facet_wrap(~Taxon_group, scales = "free_y") +
   ggplot2::scale_y_continuous(trans='log10') +
@@ -122,8 +180,42 @@ widgetframe::frameWidget(species_time_plotly)
 
 ---
 
----
+class: center, middle
+
+```{r cormus, echo=FALSE, out.height = "600px"}
+
+knitr::include_graphics(path = "Images/Cormus domestica.jpeg")
+
+
+```
 
 ---
+
+## Biotic Interaction Classification
+
+---
+
+## Source Analysis
+
+---
+
+## Phenology
+
+---
+
+## Next steps
+
+* Attempt to get the authors of each of the datasets I have used to upload their
+data to GloBI.
+
+* Create a set of observation fields in iNaturalist which correspond directly to 
+the .....
+
+* Collate information from 'low-hanging fruits' in the literature (e.g. the BES
+Biological Flora of the British Isles Papers) for inclusion in GloBI.
+
+---
+
+## References
 
 ---

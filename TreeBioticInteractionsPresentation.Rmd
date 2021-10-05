@@ -25,15 +25,18 @@ options(htmltools.dir.version = FALSE)
 ```
 
 
----
 
 ## Aim
 
 * Identify what organisms are associated with each native tree and 
-other introduced trees
+other introduced trees in Britain.
 
 * Investigate whether the number of organisms associated with each tree is
 correlated to the length of time that species has been present in Britain.
+
+* Identify under-studied tree species.
+
+* Identify obligate organisms.
 
 ---
 
@@ -49,48 +52,27 @@ correlated to the length of time that species has been present in Britain.
 
 ---
 
+class: center, middle
+
+```{r alexander_2006, echo=FALSE, out.height = "600px"}
+
+knitr::include_graphics(path = "Images/Alexander_2006.JPG")
+
+
+```
+
+---
+
 ## Relevance
+
+* Focus on habitat-orientated conservation doesn't allow us to predict the 
+species which can be supported in heavily modified, human-dominated ecosystems.
 
 * Help assess the biodiversity value of native vs non-native woodlands.
 
 * How can human-modified ecosystems be designed to conserve species.
 
 * 
-
----
-
-class: center, middle
-
-.pull-left[
-![Picea sitchensis](Images/Picea sitchensis.JPG)
-]
-
-.pull-right[
-![Polytrichum juniperinum](Images/Polytrichum juniperinum.JPG)
-]
-
----
-
-class: center, middle
-
-.pull-left[
-![Brachythecium rutabulum](Images/Brachythecium rutabulum.JPG)
-]
-
-.pull-right[
-![Leucobryum glaucum](Images/Leucobryum glaucum.JPG)
-]
-
----
-
-class: center, middle
-
-```{r oak_epi, echo=FALSE, out.width = "800px"}
-
-knitr::include_graphics(path = "Images/Oak with Epiphytes.JPG")
-
-
-```
 
 ---
 
@@ -121,7 +103,7 @@ DT::datatable(
 
 ## The Species-Time Relationship
 
-```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
+```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, fig.align = "right"}
 
 data <- read.csv("Output_Data/species_time_data.csv") |> 
   dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
@@ -145,16 +127,20 @@ foo <- ggplot2::ggplot(data,
   #                             ) +
   # ggplot2::scale_x_log10(limits = c(1e2,1e4)) +
   # ggplot2::scale_y_log10(limits = c(1,1e3)) +
+  
+  ggplot2::xlab("Years Present [Years]") +
+  ggplot2::ylab("Associated Species [-]") +
+  
   ggplot2::theme(
+    
     panel.background =  ggplot2::element_rect(fill='transparent'),
-    plot.background =  ggplot2::element_rect(fill='transparent', color=NA),
-    # panel.grid.major =  ggplot2::element_blank(),
-    # panel.grid.minor =  ggplot2::element_blank(),
+    plot.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    
     legend.background =  ggplot2::element_rect(fill='transparent', color = NA),
     legend.box.background =  ggplot2::element_rect(fill='transparent', color = NA),
     legend.key = ggplot2::element_rect(fill = "transparent", color = NA),
-    legend.title.align = 0.5,
-    # legend.box.margin =  ggplot2::element_blank(), 
+    legend.title = ggplot2::element_blank(),
+    
     axis.line = ggplot2::element_line(size = 0.5, colour = "grey80"),
     strip.background = ggplot2::element_rect(
       color='transparent', 
@@ -165,13 +151,25 @@ foo <- ggplot2::ggplot(data,
   ) + 
   ggsci::scale_color_npg()
 
+
 species_time_plotly <- plotly::ggplotly(foo,
                                         width = 1000,
                                         height = 500,
                                         tooltip = c("Species", "Tree_group",
                                                    "Growing_Time", "Associated_Species")
                                         ) |>
-  plotly::config(displayModeBar = FALSE)
+  plotly::config(displayModeBar = FALSE) #|>
+  # plotly::layout(yaxis = list(title = "Associated Species []"),
+  #                xaxis = list(title = "Years Present []"))
+
+# Adjust X axis plotly labels 
+species_time_plotly[['x']][['layout']][['annotations']][[1]][['x']] <- 0.5
+species_time_plotly[['x']][['layout']][['annotations']][[1]][['y']] <- -0.042
+
+# Adjust y axis plotly labels
+species_time_plotly[['x']][['layout']][['annotations']][[2]][['y']] <- 0.5
+species_time_plotly[['x']][['layout']][['annotations']][[2]][['x']] <- -0.042
+
 
 widgetframe::frameWidget(species_time_plotly)
 
@@ -182,16 +180,37 @@ widgetframe::frameWidget(species_time_plotly)
 
 class: center, middle
 
-```{r cormus, echo=FALSE, out.height = "600px"}
+.pull-left[
+![Pholiota squarrosa](Images/Pholiota squarrosa.jpeg)
+]
 
-knitr::include_graphics(path = "Images/Cormus domestica.jpeg")
-
-
-```
+.pull-right[
+![Cormus domestica](Images/Cormus domestica.jpeg)
+]
 
 ---
 
-## Biotic Interaction Classification
+class: center, middle
+
+.pull-left[
+![Picea sitchensis](Images/Picea sitchensis.JPG)
+]
+
+.pull-right[
+![Polytrichum juniperinum](Images/Polytrichum juniperinum.JPG)
+]
+
+---
+
+class: center, middle
+
+.pull-left[
+![Brachythecium rutabulum](Images/Brachythecium rutabulum.JPG)
+]
+
+.pull-right[
+![Leucobryum glaucum](Images/Leucobryum glaucum.JPG)
+]
 
 ---
 
@@ -199,7 +218,35 @@ knitr::include_graphics(path = "Images/Cormus domestica.jpeg")
 
 ---
 
-## Phenology
+## Biotic Interaction Classification
+
+---
+
+## Classification information from Data Sources
+
+* GloBI data follows OBO Relations ontology
+
+* FRDBI data has information on the substrate that the interaction was recorded
+on, but only for some observations
+
+* BLS data has no information on the nature of the interactions, though for 
+Lichens the relationship is usually commensal, with Lichens as Epiphytes.
+
+* DBIF data by nature records trophic interactions wherein the host tree is the 
+food source of the insect
+
+* Mitchell studies have notes for some species, but no structured classification
+of interaction types.
+
+---
+
+## Limitations
+
+* No information on the abundance or biomass of a given organism associated
+with each tree.
+
+* Limited information on the location (and therefore habitat and conditions) that
+the interaction was recorded in.
 
 ---
 
@@ -209,7 +256,7 @@ knitr::include_graphics(path = "Images/Cormus domestica.jpeg")
 data to GloBI.
 
 * Create a set of observation fields in iNaturalist which correspond directly to 
-the .....
+the GloBI relations ontology.
 
 * Collate information from 'low-hanging fruits' in the literature (e.g. the BES
 Biological Flora of the British Isles Papers) for inclusion in GloBI.
@@ -217,5 +264,17 @@ Biological Flora of the British Isles Papers) for inclusion in GloBI.
 ---
 
 ## References
+
+* Alexander, Keith & Butler, J. & Green, T.. (2006). The value of different tree and shrub species to wildlife. British Wildlife. 18. 18-28. 
+
+* Birks, H.J.B., 1980. British trees and insects: a test of the time hypothesis over the last 13,000 years. The American Naturalist, 115(4), pp.600-605.
+
+* Evans, H. F. (1987). Sitka spruce insects: past, present and future. Proceedings of the Royal Society of Edinburgh. Section B. Biological Sciences, 93(1-2), 157–167.
+
+* Kennedy, C.E.J. and Southwood, T.R.E., 1984. The number of species of insects associated with British trees: a re-analysis. The Journal of Animal Ecology, pp.455-478.
+
+* Southwood, T.R.E., 1961. The number of species of insect associated with various trees. The Journal of Animal Ecology, pp.1-8.
+
+
 
 ---

@@ -52,14 +52,14 @@ correlated to the length of time that species has been present in Britain.
 
 ---
 
-class: center, middle
+.pull-left[
+![Evans_1987](Images/Evans_1987.PNG)
+]
 
-```{r alexander_2006, echo=FALSE, out.height = "600px"}
+.pull-right[
+![Alexander_2006](Images/Alexander_2006.JPG)
+]
 
-knitr::include_graphics(path = "Images/Alexander_2006.JPG")
-
-
-```
 
 ---
 
@@ -76,7 +76,46 @@ species which can be supported in heavily modified, human-dominated ecosystems.
 
 ---
 
-## Associated Species
+## Current Data Sources
+
+* The Global Biotic Interactions Database (GloBI)
+
+* Mitchell et al (2014) - Assessing and addressing the impacts of ash dieback on UK woodlands and trees of conservation importance
+
+* Mitchell et al (2019) - OakEcol: A database of Oak-associated biodiversity within the UK 
+
+* The Fungal Records Database of Britain and Ireland (FRDBI)
+
+* THe British Lichen Society Database
+
+* The Biological Records Centre (BRC) Database of Insects and their Food plants (DBIF)
+
+---
+
+## Associated Species - Sample
+
+```{r sample_data, echo=FALSE, out.width = "100%"}
+
+sample_data <- readRDS(file = "Output_Data/sample_interactions_data.rds")
+
+DT::datatable(
+  sample_data,
+  fillContainer = FALSE, 
+  rownames = FALSE,
+  options = list(
+    pageLength = 5,
+    columnDefs = list(list(className = 'dt-center', targets="_all"))
+    )
+)
+
+
+
+```
+
+
+---
+
+## Associated Species - Table
 
 ```{r assoc_spp, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, out.width = "100%"}
 
@@ -103,7 +142,7 @@ DT::datatable(
 
 ## The Species-Time Relationship
 
-```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, fig.align = "right"}
+```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
 
 data <- read.csv("Output_Data/species_time_data.csv") |> 
   dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
@@ -153,22 +192,20 @@ foo <- ggplot2::ggplot(data,
 
 
 species_time_plotly <- plotly::ggplotly(foo,
-                                        width = 1000,
-                                        height = 500,
+                                        width = 940,
+                                        height = 470,
                                         tooltip = c("Species", "Tree_group",
-                                                   "Growing_Time", "Associated_Species")
+                                                    "Growing_Time", "Associated_Species")
                                         ) |>
-  plotly::config(displayModeBar = FALSE) #|>
-  # plotly::layout(yaxis = list(title = "Associated Species []"),
-  #                xaxis = list(title = "Years Present []"))
+  plotly::config(displayModeBar = FALSE)
 
 # Adjust X axis plotly labels 
 species_time_plotly[['x']][['layout']][['annotations']][[1]][['x']] <- 0.5
-species_time_plotly[['x']][['layout']][['annotations']][[1]][['y']] <- -0.042
+species_time_plotly[['x']][['layout']][['annotations']][[1]][['y']] <- -0.045
 
 # Adjust y axis plotly labels
 species_time_plotly[['x']][['layout']][['annotations']][[2]][['y']] <- 0.5
-species_time_plotly[['x']][['layout']][['annotations']][[2]][['x']] <- -0.042
+species_time_plotly[['x']][['layout']][['annotations']][[2]][['x']] <- -0.045
 
 
 widgetframe::frameWidget(species_time_plotly)
@@ -190,27 +227,87 @@ class: center, middle
 
 ---
 
-class: center, middle
+## The Species-Area Relationship
 
-.pull-left[
-![Picea sitchensis](Images/Picea sitchensis.JPG)
-]
+```{r species_area, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
 
-.pull-right[
-![Polytrichum juniperinum](Images/Polytrichum juniperinum.JPG)
-]
+species_area_df <- read.csv(file = "Output_Data/species_area_df.csv")
+
+species_area_plot <- ggplot2::ggplot(data = species_area_df,
+                                     mapping = ggplot2::aes(x = Area,
+                                                            y = Associated_Species,
+                                                            color = Tree_group,
+                                                            label = Species)) +
+  ggplot2::geom_point() +
+  ggplot2::facet_wrap(~Taxon_group, scales = "free_y") +
+  # ggplot2::scale_y_continuous(trans='log10') +
+  # ggplot2::scale_x_continuous(trans='log10') +
+  
+  ggplot2::xlab("Area (2014) [1000 ha]") +
+  ggplot2::ylab("Associated Species [-]") +
+  
+  
+  ggplot2::theme(
+    
+    panel.background =  ggplot2::element_rect(fill='transparent'),
+    plot.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    
+    legend.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    legend.box.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    legend.key = ggplot2::element_rect(fill = "transparent", color = NA),
+    legend.title = ggplot2::element_blank(),
+    
+    axis.line = ggplot2::element_line(size = 0.5, colour = "grey80"),
+    strip.background = ggplot2::element_rect(
+      color='transparent', 
+      fill='transparent', 
+      size=1.5, 
+      linetype="solid"
+     )
+  ) + 
+  ggsci::scale_color_npg()
+
+
+species_area_plotly <- plotly::ggplotly(species_area_plot,
+                                        width = 940,
+                                        height = 470,
+                                        tooltip = c("Species", "Tree_group",
+                                                    "Area", "Associated_Species")) |>
+  plotly::config(displayModeBar = FALSE)
+
+
+# Adjust X axis plotly labels 
+species_area_plotly[['x']][['layout']][['annotations']][[1]][['x']] <- 0.5
+species_area_plotly[['x']][['layout']][['annotations']][[1]][['y']] <- -0.045
+
+# Adjust y axis plotly labels
+species_area_plotly[['x']][['layout']][['annotations']][[2]][['y']] <- 0.5
+species_area_plotly[['x']][['layout']][['annotations']][[2]][['x']] <- -0.045
+
+widgetframe::frameWidget(species_area_plotly)
+
+
+```
 
 ---
 
 class: center, middle
 
 .pull-left[
-![Brachythecium rutabulum](Images/Brachythecium rutabulum.JPG)
+![Polytrichum juniperinum](Images/Polytrichum juniperinum.JPG)
 ]
 
 .pull-right[
 ![Leucobryum glaucum](Images/Leucobryum glaucum.JPG)
 ]
+
+---
+
+```{r oak_epi, echo=FALSE, fig.height=600}
+
+knitr::include_graphics(path = "Images/Oak with Epiphytes.JPG")
+
+```
 
 ---
 
@@ -222,7 +319,7 @@ class: center, middle
 
 ---
 
-## Classification information from Data Sources
+## Limitations
 
 * GloBI data follows OBO Relations ontology
 
@@ -273,8 +370,11 @@ Biological Flora of the British Isles Papers) for inclusion in GloBI.
 
 * Kennedy, C.E.J. and Southwood, T.R.E., 1984. The number of species of insects associated with British trees: a re-analysis. The Journal of Animal Ecology, pp.455-478.
 
-* Southwood, T.R.E., 1961. The number of species of insect associated with various trees. The Journal of Animal Ecology, pp.1-8.
+* Mitchell, R.J., Broome, A., Harmer, R., Beaton, J.K., Bellamy, P.E., Brooker, R.W., Duncan, R., Ellis, C.J., Hester, A.J., Hodgetts, N.G. and Iason, G.R., 2014. Assessing and addressing the impacts of ash dieback on UK woodlands and trees of conservation importance (Phase 2).
 
+* Mitchell, R.J., Bellamy, P.E., Ellis, C.J., Hewison, R.L., Hodgetts, N.G., Iason, G.R., Littlewood, N.A., Newey, S., Stockan, J.A. and Taylor, A.F.S., 2019. OakEcol: A database of Oak-associated biodiversity within the UK. Data in brief, 25, p.104120.
+
+* Southwood, T.R.E., 1961. The number of species of insect associated with various trees. The Journal of Animal Ecology, pp.1-8.
 
 
 ---

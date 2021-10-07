@@ -1,0 +1,91 @@
+Species,Taxon_group,Associated_Species,Area,Tree_group
+Acer pseudoplatanus,Lichen,697,106,Introduced
+Acer pseudoplatanus,Fungi,735,106,Introduced
+Acer pseudoplatanus,Bryophytes,95,106,Introduced
+Acer pseudoplatanus,Birds,21,106,Introduced
+Acer pseudoplatanus,Mammals,20,106,Introduced
+Acer pseudoplatanus,Invertebrates,253,106,Introduced
+Alnus glutinosa,Lichen,583,58,Native
+Alnus glutinosa,Fungi,1684,58,Native
+Alnus glutinosa,Bryophytes,129,58,Native
+Alnus glutinosa,Birds,24,58,Native
+Alnus glutinosa,Mammals,17,58,Native
+Alnus glutinosa,Invertebrates,376,58,Native
+Betula pendula,Lichen,332,236,Native
+Betula pendula,Fungi,1599,236,Native
+Betula pendula,Bryophytes,67,236,Native
+Betula pendula,Birds,19,236,Native
+Betula pendula,Mammals,14,236,Native
+Betula pendula,Invertebrates,360,236,Native
+Castanea sativa,Lichen,304,29,Introduced
+Castanea sativa,Fungi,479,29,Introduced
+Castanea sativa,Bryophytes,25,29,Introduced
+Castanea sativa,Birds,22,29,Introduced
+Castanea sativa,Mammals,10,29,Introduced
+Castanea sativa,Invertebrates,237,29,Introduced
+Corylus avellana,Lichen,671,87,Native
+Corylus avellana,Fungi,2250,87,Native
+Corylus avellana,Bryophytes,99,87,Native
+Corylus avellana,Birds,4,87,Native
+Corylus avellana,Mammals,11,87,Native
+Corylus avellana,Invertebrates,227,87,Native
+Crataegus monogyna,Lichen,220,73,Native
+Crataegus monogyna,Fungi,946,73,Native
+Crataegus monogyna,Bryophytes,41,73,Native
+Crataegus monogyna,Birds,56,73,Native
+Crataegus monogyna,Mammals,14,73,Native
+Crataegus monogyna,Invertebrates,163,73,Native
+Fagus sylvatica,Lichen,682,94,Native
+Fagus sylvatica,Fungi,3744,94,Native
+Fagus sylvatica,Bryophytes,87,94,Native
+Fagus sylvatica,Birds,33,94,Native
+Fagus sylvatica,Mammals,26,94,Native
+Fagus sylvatica,Invertebrates,493,94,Native
+Fraxinus excelsior,Lichen,959,157,Native
+Fraxinus excelsior,Fungi,2254,157,Native
+Fraxinus excelsior,Bryophytes,144,157,Native
+Fraxinus excelsior,Birds,27,157,Native
+Fraxinus excelsior,Mammals,30,157,Native
+Fraxinus excelsior,Invertebrates,471,157,Native
+Picea abies,Lichen,7,61,Forestry conifers
+Picea abies,Fungi,243,61,Forestry conifers
+Picea abies,Bryophytes,55,61,Forestry conifers
+Picea abies,Birds,31,61,Forestry conifers
+Picea abies,Mammals,11,61,Forestry conifers
+Picea abies,Invertebrates,244,61,Forestry conifers
+Picea sitchensis,Lichen,20,665,Forestry conifers
+Picea sitchensis,Fungi,154,665,Forestry conifers
+Picea sitchensis,Bryophytes,NA,665,Forestry conifers
+Picea sitchensis,Birds,3,665,Forestry conifers
+Picea sitchensis,Mammals,NA,665,Forestry conifers
+Picea sitchensis,Invertebrates,35,665,Forestry conifers
+Pinus contorta,Lichen,23,100,Forestry conifers
+Pinus contorta,Fungi,230,100,Forestry conifers
+Pinus contorta,Bryophytes,NA,100,Forestry conifers
+Pinus contorta,Birds,1,100,Forestry conifers
+Pinus contorta,Mammals,NA,100,Forestry conifers
+Pinus contorta,Invertebrates,28,100,Forestry conifers
+Pinus nigra,Lichen,NA,46,Forestry conifers
+Pinus nigra,Fungi,103,46,Forestry conifers
+Pinus nigra,Bryophytes,NA,46,Forestry conifers
+Pinus nigra,Birds,NA,46,Forestry conifers
+Pinus nigra,Mammals,NA,46,Forestry conifers
+Pinus nigra,Invertebrates,21,46,Forestry conifers
+Pinus sylvestris,Lichen,306,218,Native
+Pinus sylvestris,Fungi,2355,218,Native
+Pinus sylvestris,Bryophytes,51,218,Native
+Pinus sylvestris,Birds,30,218,Native
+Pinus sylvestris,Mammals,24,218,Native
+Pinus sylvestris,Invertebrates,327,218,Native
+Pseudotsuga menziesii,Lichen,59,46,Forestry conifers
+Pseudotsuga menziesii,Fungi,460,46,Forestry conifers
+Pseudotsuga menziesii,Bryophytes,9,46,Forestry conifers
+Pseudotsuga menziesii,Birds,25,46,Forestry conifers
+Pseudotsuga menziesii,Mammals,9,46,Forestry conifers
+Pseudotsuga menziesii,Invertebrates,145,46,Forestry conifers
+Quercus robur,Lichen,739,219,Native
+Quercus robur,Fungi,2552,219,Native
+Quercus robur,Bryophytes,231,219,Native
+Quercus robur,Birds,41,219,Native
+Quercus robur,Mammals,43,219,Native
+Quercus robur,Invertebrates,1222,219,Native

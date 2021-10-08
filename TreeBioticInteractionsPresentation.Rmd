@@ -80,13 +80,13 @@ species which can be supported in heavily modified, human-dominated ecosystems.
 
 * The Global Biotic Interactions Database (GloBI)
 
-* Mitchell et al (2014) - Assessing and addressing the impacts of ash dieback on UK woodlands and trees of conservation importance
+* Mitchell et al (2014) - AshEcol: A spreadsheet of Ash-associated biodiversity.
 
 * Mitchell et al (2019) - OakEcol: A database of Oak-associated biodiversity within the UK 
 
 * The Fungal Records Database of Britain and Ireland (FRDBI)
 
-* THe British Lichen Society Database
+* The British Lichen Society Database
 
 * The Biological Records Centre (BRC) Database of Insects and their Food plants (DBIF)
 
@@ -212,6 +212,34 @@ widgetframe::frameWidget(species_time_plotly)
 
 ```
 
+---
+
+```{r species_time_box, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
+
+data <- read.csv("Output_Data/species_time_data.csv") |> 
+  dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
+
+
+foo <- ggplot2::ggplot(data) +
+  ggplot2::geom_boxplot(mapping = ggplot2::aes(x = Tree_group,
+                                               y = Associated_Species),
+                        outlier.shape = NA
+                        ) +
+  ggplot2::facet_wrap(~Taxon_group, scales = "free_y") +
+  
+  ggsci::scale_color_npg() +
+  
+  ggplot2::theme_minimal()
+
+foo_plotly <- plotly::ggplotly(foo,
+                               width = 1000,
+                               height = 600) |>
+  plotly::config(displayModeBar = FALSE)
+
+widgetframe::frameWidget(foo_plotly)
+
+
+```
 
 ---
 
@@ -303,7 +331,7 @@ class: center, middle
 
 ---
 
-```{r oak_epi, echo=FALSE, fig.height=600}
+```{r oak_epi, echo=FALSE, out.height=600, out.width=800, fig.align='center'}
 
 knitr::include_graphics(path = "Images/Oak with Epiphytes.JPG")
 
@@ -347,6 +375,20 @@ the interaction was recorded in.
 
 ---
 
+## How to contribute
+
+class: center, middle
+
+.pull-left[
+![Github_GloBI](Images/Github_GloBI.JPG)
+]
+
+.pull-right[
+![iNat_obs](Images/iNat_obs.JPG)
+]
+
+---
+
 ## Next steps
 
 * Attempt to get the authors of each of the datasets I have used to upload their
@@ -373,6 +415,8 @@ Biological Flora of the British Isles Papers) for inclusion in GloBI.
 * Mitchell, R.J., Broome, A., Harmer, R., Beaton, J.K., Bellamy, P.E., Brooker, R.W., Duncan, R., Ellis, C.J., Hester, A.J., Hodgetts, N.G. and Iason, G.R., 2014. Assessing and addressing the impacts of ash dieback on UK woodlands and trees of conservation importance (Phase 2).
 
 * Mitchell, R.J., Bellamy, P.E., Ellis, C.J., Hewison, R.L., Hodgetts, N.G., Iason, G.R., Littlewood, N.A., Newey, S., Stockan, J.A. and Taylor, A.F.S., 2019. OakEcol: A database of Oak-associated biodiversity within the UK. Data in brief, 25, p.104120.
+
+* Simkin, J., 2012. The BLS database project. Br Lichen Soc Bull, 111, pp.8-14.
 
 * Southwood, T.R.E., 1961. The number of species of insect associated with various trees. The Journal of Animal Ecology, pp.1-8.
 

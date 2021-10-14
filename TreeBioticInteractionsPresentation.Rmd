@@ -22,6 +22,15 @@ xaringanExtra::use_progress_bar(color = "#415E3E", location = "top")
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+
+
+
+# Define custom color scale
+myColors <- c("#a63e03", "#928802", "#0351a6", "#00A087FF")
+names(myColors) <- c("Forestry conifers", "Forestry broadleaves", "Introduced", "Native")
+custom_colors <- ggplot2::scale_colour_manual(name = "Tree groups", values = myColors)
+custom_fill <- ggplot2::scale_fill_manual(name = "Tree groups", values = myColors)
+
 ```
 
 
@@ -43,71 +52,123 @@ correlated to the length of time that species has been present in Britain.
 ## Inspiration
 
 .pull-left[
-![Birks_1980](Images/Birks_1980.PNG)
+```{r birks_1980, echo=FALSE, fig.align='center'}
+
+# , fig.pos=
+
+knitr::include_graphics(path = "Images/Birks_1980.PNG")
+
+```
 ]
 
 .pull-right[
-![Southwood_1961](Images/Southwood_1961.PNG)
+```{r southwood_1961, echo=FALSE, fig.align='center'}
+
+knitr::include_graphics(path = "Images/Southwood_1961.PNG")
+
+```
 ]
 
 ---
 
+## Inspiration
+
 .pull-left[
-![Evans_1987](Images/Evans_1987.PNG)
+```{r humphrey_2001, echo=FALSE, fig.align='center', out.height= 350, out.width=700}
+
+knitr::include_graphics(path = "Images/Humphrey_2001.JPG")
+
+```
 ]
 
 .pull-right[
-![Alexander_2006](Images/Alexander_2006.JPG)
-]
+```{r alexander_2006, echo=FALSE, fig.align='center', out.height=500, out.width=275}
 
+knitr::include_graphics(path = "Images/Alexander_2006.JPG")
+
+```
+]
 
 ---
 
 ## Relevance
 
-* Focus on habitat-orientated conservation doesn't allow us to predict the 
-species which can be supported in heavily modified, human-dominated ecosystems.
+* Analysing species occurrences doesn't explicitly tell us why a species is present in a habitat.
 
-* Help assess the biodiversity value of native vs non-native woodlands.
+* Help assess the biodiversity value of native vs non-native trees & woodlands.
 
-* How can human-modified ecosystems be designed to conserve species.
+* Analysing species interactions may allow us to predict the species which can be supported in 
+heavily modified, human-dominated ecosystems.
+---
 
-* 
+## Sources
+
+```{r source_analysis, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
+
+data <- read.csv(file = "Output_Data/source_count.csv")
+
+source_plot <- ggplot2::ggplot(data) + 
+  ggplot2::geom_col(mapping = ggplot2::aes(x = study_source_citation,
+                                           y = count)) +
+  
+  ggplot2::xlab("") +
+  ggplot2::ylab("Number of Observations [-]") +
+  
+  ggplot2::theme(
+    
+    panel.background =  ggplot2::element_rect(fill='transparent'),
+    plot.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    
+    legend.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    legend.box.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    legend.key = ggplot2::element_rect(fill = "transparent", color = NA),
+    legend.title = ggplot2::element_blank(),
+    
+    axis.line = ggplot2::element_line(size = 0.5, colour = "grey80"),
+    strip.background = ggplot2::element_rect(
+      color='transparent', 
+      fill='transparent', 
+      size=1.5, 
+      linetype="solid"
+     )
+  )
+  
+
+source_plotly <- plotly::ggplotly(source_plot,
+                                  width = 940,
+                                  height = 470,
+                                  tooltip = c("count")) |>
+                   plotly::config(displayModeBar = FALSE)
+
+widgetframe::frameWidget(source_plotly)
+
+
+```
 
 ---
 
-## Current Data Sources
-
-* The Global Biotic Interactions Database (GloBI)
-
-* Mitchell et al (2014) - AshEcol: A spreadsheet of Ash-associated biodiversity.
-
-* Mitchell et al (2019) - OakEcol: A database of Oak-associated biodiversity within the UK 
-
-* The Fungal Records Database of Britain and Ireland (FRDBI)
-
-* The British Lichen Society Database
-
-* The Biological Records Centre (BRC) Database of Insects and their Food plants (DBIF)
-
----
-
-## Associated Species - Sample
+## Associated Species - Sample (redo)
 
 ```{r sample_data, echo=FALSE, out.width = "100%"}
 
-sample_data <- readRDS(file = "Output_Data/sample_interactions_data.rds")
+sample_data <- readRDS(file = "Output_Data/sample_interactions_data.rds") |> 
+  magrittr::set_colnames(c("Tree Species", "Associated Species", "Taxon Group", "Source"))
 
 DT::datatable(
   sample_data,
-  fillContainer = FALSE, 
+  fillContainer = FALSE,
   rownames = FALSE,
   options = list(
-    pageLength = 5,
-    columnDefs = list(list(className = 'dt-center', targets="_all"))
+    pageLength = 12,
+    columnDefs = list(list(className = 'dt-center', targets="_all")),
+    headerCallback = DT::JS(
+      "function(thead) {",
+      "  $(thead).css('font-size', '0.5em');",
+      "}"
+      )
     )
-)
-
+) |> 
+  DT::formatStyle(columns = 1:ncol(sample_data), fontSize = '50%')
 
 
 ```
@@ -130,32 +191,177 @@ DT::datatable(
   fillContainer = FALSE, 
   rownames = FALSE,
   options = list(
-    pageLength = 9,
-    columnDefs = list(list(className = 'dt-center', targets="_all"))
+    pageLength = 12,
+    columnDefs = list(list(className = 'dt-center', targets="_all")),
+    headerCallback = DT::JS(
+      "function(thead) {",
+      "  $(thead).css('font-size', '0.5em');",
+      "}"
+      )
     )
-)
+) |> 
+  DT::formatStyle(columns = 1:ncol(data_t), fontSize = '50%')
 
 ```
 
 
 ---
 
-## The Species-Time Relationship
+## Differences Between Tree Groups
 
-```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
+```{r species_time_box, echo=FALSE, warning=FALSE, fig.align='center', include=TRUE, fig.width=18, fig.height=9, dpi=600}
 
 data <- read.csv("Output_Data/species_time_data.csv") |> 
-  dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
+ dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
 
-foo <- ggplot2::ggplot(data,
-                       mapping = ggplot2::aes(x = Growing_Time,
-                                              y = Associated_Species,
-                                              color = Tree_group,
-                                              label = Species)) +
+
+mult <- c(1, 1.03, 1.06, 1.08, 1.1, 1.14)
+
+ttests <- data |> 
+  dplyr::group_by(Taxon_group) |> 
+  rstatix::t_test(Associated_Species ~ Tree_group, p.adjust.method = "bonferroni") |> 
+  dplyr::select(-.y., -statistic, -df) |> 
+  rstatix::add_x_position(x = "Tree_group") |> 
+  rstatix::add_y_position(fun = "max",
+                          y.trans = log10,
+                          scales = "free_y") |> 
+  dplyr::mutate(y.position = (y.position*mult))
+
+box <- ggplot2::ggplot(data) +
+  
+  ggplot2::geom_boxplot(mapping = ggplot2::aes(x = Tree_group,
+                                               y = Associated_Species,
+                                               fill = Tree_group),
+                        outlier.shape = NA) +
+  
+  ggplot2::scale_y_log10() +
+  
+  ggpubr::stat_pvalue_manual(ttests,
+                             label = "p.adj.signif") +
+  
+  custom_fill +
+  
+  ggplot2::theme_minimal() +
+  
+  ggplot2::theme(
+    
+    axis.text.x = ggplot2::element_blank(),
+    axis.title.x = ggplot2::element_blank(),
+    
+    axis.title.y = ggplot2::element_text(size = 16),
+    
+    panel.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    plot.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    panel.border = ggplot2::element_blank(),
+    
+    legend.position = "bottom",
+    legend.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    legend.box.background =  ggplot2::element_rect(fill='transparent', color = NA),
+    legend.key = ggplot2::element_rect(fill = "transparent", color = NA),
+    legend.title = ggplot2::element_blank(),
+    legend.text = ggplot2::element_text(size = 16),
+    
+    axis.line = ggplot2::element_line(size = 0.5, colour = "grey80"),
+    strip.background = ggplot2::element_rect(
+      color='transparent', 
+      fill='transparent', 
+      size=1.5, 
+      linetype="solid"
+     )
+    
+  ) + 
+  
+  ggplot2::facet_wrap(~Taxon_group, scales = "free_y", nrow = 1) +
+  
+  ggplot2::theme(strip.text.x = ggplot2::element_text(size = 16, colour = "black", angle = 0)) +
+  
+  ggplot2::xlab("") +
+  ggplot2::ylab("Associated Species [-]")
+
+box
+
+
+```
+
+---
+
+## The Species-Time Relationship
+
+```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, out.width="100%", fig.align='center'}
+
+data <- read.csv("Output_Data/species_time_data.csv") #|> 
+  # dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
+
+# Models for data grouped by tree group
+modelsG <- data |> 
+  dplyr::group_by(Taxon_group, Tree_group) |> 
+  dplyr::summarise(model = list(stats::lm(log10(Associated_Species) ~ log10(Growing_Time))))
+
+modelsG_summary <- data.frame(Taxon_group = modelsG$Taxon_group, Tree_group = modelsG$Tree_group) |> 
+  cbind(purrr::map_df(modelsG$model, broom::glance))
+
+# Models for data ungrouped by tree group
+models <- data |> 
+  dplyr::group_by(Taxon_group) |> 
+  dplyr::summarise(model = list(stats::lm(log10(Associated_Species) ~ log10(Growing_Time))))
+
+models_summary <- data.frame(Taxon_group = models$Taxon_group) |> 
+  cbind(purrr::map_df(models$model, broom::glance))
+
+# r2_annot_total <- data.frame(
+#   label = c(paste("R2: ", round(models_summary$r.squared, 2))),
+#   Taxon_group = c(models_summary$Taxon_group)
+# )
+
+# formula <- y ~ x
+
+species_time_plot <- ggplot2::ggplot(data,
+                                     mapping = ggplot2::aes(x = Growing_Time,
+                                                            y = Associated_Species,
+                                                            color = Tree_group,
+                                                            label = Species)) +
   ggplot2::geom_point() +
+  
+  # ggplot2::geom_smooth(method = lm,
+  #                      na.rm = TRUE,
+  #                      fullrange = TRUE,
+  #                      se = FALSE,
+  #                      ggplot2::aes(group = 1, color = "Regression"),
+  #                      size = 0.3,
+  #                      colour = "grey") +
+
+  # ggplot2::geom_text(data = r2_annot_total,
+  #                    mapping = ggplot2::aes(x = 2500, y = 1, label = label, color = NA),
+  #                    hjust = +1,
+  #                    vjust = -1,
+  #                    size = 3) +
+
+  # ggpmisc::stat_poly_line(formula = formula,
+  #                         ggplot2::aes(color = Tree_group),
+  #                         size = 0.25,
+  #                         se = FALSE
+  #                         ) +
+  # 
+  # ggpmisc::stat_poly_line(formula = formula,
+  #                         ggplot2::aes(group = 1, color = "Total"),
+  #                         size = 0.25,
+  #                         se = FALSE
+  #                         ) +
+
+  # # ggpmisc::stat_poly_eq() not yet supported by plotly
+  # ggpmisc::stat_poly_eq(ggplot2::aes(label = stat(rr.label)),
+  #                                    size = 3,
+  #                                    alpha = 1,
+  #                                    geom = "text_npc",
+  #                                    formula = y ~ x) +
+  
+  
+  
   ggplot2::facet_wrap(~Taxon_group, scales = "free_y") +
+  
   ggplot2::scale_y_continuous(trans='log10') +
   ggplot2::scale_x_continuous(trans='log10') +
+  
   # ggplot2::scale_y_continuous(trans=scales::pseudo_log_trans(base = 10), 
   #                             # breaks = log_breaks(base = 10),
   #                             # expand = c(0, 0)
@@ -175,6 +381,7 @@ foo <- ggplot2::ggplot(data,
     panel.background =  ggplot2::element_rect(fill='transparent'),
     plot.background =  ggplot2::element_rect(fill='transparent', color = NA),
     
+    # legend.box.margin = 0.1,
     legend.background =  ggplot2::element_rect(fill='transparent', color = NA),
     legend.box.background =  ggplot2::element_rect(fill='transparent', color = NA),
     legend.key = ggplot2::element_rect(fill = "transparent", color = NA),
@@ -188,12 +395,13 @@ foo <- ggplot2::ggplot(data,
       linetype="solid"
      )
   ) + 
-  ggsci::scale_color_npg()
+  
+  custom_colors
 
 
-species_time_plotly <- plotly::ggplotly(foo,
-                                        width = 940,
-                                        height = 470,
+species_time_plotly <- plotly::ggplotly(species_time_plot,
+                                        width = 1000,
+                                        height = 450,
                                         tooltip = c("Species", "Tree_group",
                                                     "Growing_Time", "Associated_Species")
                                         ) |>
@@ -214,29 +422,44 @@ widgetframe::frameWidget(species_time_plotly)
 
 ---
 
-```{r species_time_box, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
+```{r model_results, echo=FALSE, message=FALSE, warning=FALSE}
 
-data <- read.csv("Output_Data/species_time_data.csv") |> 
-  dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
+data <- read.csv("Output_Data/species_time_data.csv") #|> 
+  # dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
 
+# Models for data grouped by tree group
+modelsG <- data |> 
+  dplyr::group_by(Taxon_group, Tree_group) |> 
+  dplyr::summarise(model = list(stats::lm(log10(Associated_Species) ~ log10(Growing_Time))))
 
-foo <- ggplot2::ggplot(data) +
-  ggplot2::geom_boxplot(mapping = ggplot2::aes(x = Tree_group,
-                                               y = Associated_Species),
-                        outlier.shape = NA
-                        ) +
-  ggplot2::facet_wrap(~Taxon_group, scales = "free_y") +
-  
-  ggsci::scale_color_npg() +
-  
-  ggplot2::theme_minimal()
+modelsG_summary <- data.frame(Taxon_group = modelsG$Taxon_group, Tree_group = modelsG$Tree_group) |> 
+  cbind(purrr::map_df(modelsG$model, broom::glance))
 
-foo_plotly <- plotly::ggplotly(foo,
-                               width = 1000,
-                               height = 600) |>
-  plotly::config(displayModeBar = FALSE)
+# Models for data ungrouped by tree group
+models <- data |> 
+  dplyr::group_by(Taxon_group) |> 
+  dplyr::summarise(model = list(stats::lm(log10(Associated_Species) ~ log10(Growing_Time))))
 
-widgetframe::frameWidget(foo_plotly)
+models_summary <- data.frame(Taxon_group = models$Taxon_group) |> 
+  cbind(purrr::map_df(models$model, broom::glance))
+
+#
+DT::datatable(
+  modelsG_summary,
+  fillContainer = FALSE, 
+  rownames = FALSE,
+  options = list(
+    pageLength = 12,
+    columnDefs = list(list(className = 'dt-center', targets="_all")),
+    headerCallback = DT::JS(
+      "function(thead) {",
+      "  $(thead).css('font-size', '0.5em');",
+      "}"
+      )
+    )
+) |> 
+  DT::formatStyle(columns = 1:ncol(modelsG_summary), fontSize = '50%')
+
 
 
 ```
@@ -255,70 +478,6 @@ class: center, middle
 
 ---
 
-## The Species-Area Relationship
-
-```{r species_area, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE}
-
-species_area_df <- read.csv(file = "Output_Data/species_area_df.csv")
-
-species_area_plot <- ggplot2::ggplot(data = species_area_df,
-                                     mapping = ggplot2::aes(x = Area,
-                                                            y = Associated_Species,
-                                                            color = Tree_group,
-                                                            label = Species)) +
-  ggplot2::geom_point() +
-  ggplot2::facet_wrap(~Taxon_group, scales = "free_y") +
-  # ggplot2::scale_y_continuous(trans='log10') +
-  # ggplot2::scale_x_continuous(trans='log10') +
-  
-  ggplot2::xlab("Area (2014) [1000 ha]") +
-  ggplot2::ylab("Associated Species [-]") +
-  
-  
-  ggplot2::theme(
-    
-    panel.background =  ggplot2::element_rect(fill='transparent'),
-    plot.background =  ggplot2::element_rect(fill='transparent', color = NA),
-    
-    legend.background =  ggplot2::element_rect(fill='transparent', color = NA),
-    legend.box.background =  ggplot2::element_rect(fill='transparent', color = NA),
-    legend.key = ggplot2::element_rect(fill = "transparent", color = NA),
-    legend.title = ggplot2::element_blank(),
-    
-    axis.line = ggplot2::element_line(size = 0.5, colour = "grey80"),
-    strip.background = ggplot2::element_rect(
-      color='transparent', 
-      fill='transparent', 
-      size=1.5, 
-      linetype="solid"
-     )
-  ) + 
-  ggsci::scale_color_npg()
-
-
-species_area_plotly <- plotly::ggplotly(species_area_plot,
-                                        width = 940,
-                                        height = 470,
-                                        tooltip = c("Species", "Tree_group",
-                                                    "Area", "Associated_Species")) |>
-  plotly::config(displayModeBar = FALSE)
-
-
-# Adjust X axis plotly labels 
-species_area_plotly[['x']][['layout']][['annotations']][[1]][['x']] <- 0.5
-species_area_plotly[['x']][['layout']][['annotations']][[1]][['y']] <- -0.045
-
-# Adjust y axis plotly labels
-species_area_plotly[['x']][['layout']][['annotations']][[2]][['y']] <- 0.5
-species_area_plotly[['x']][['layout']][['annotations']][[2]][['x']] <- -0.045
-
-widgetframe::frameWidget(species_area_plotly)
-
-
-```
-
----
-
 class: center, middle
 
 .pull-left[
@@ -331,25 +490,17 @@ class: center, middle
 
 ---
 
+
 ```{r oak_epi, echo=FALSE, out.height=600, out.width=800, fig.align='center'}
 
 knitr::include_graphics(path = "Images/Oak with Epiphytes.JPG")
 
 ```
 
----
-
-## Source Analysis
-
----
-
-## Biotic Interaction Classification
 
 ---
 
 ## Limitations
-
-* GloBI data follows OBO Relations ontology
 
 * FRDBI data has information on the substrate that the interaction was recorded
 on, but only for some observations
@@ -363,10 +514,6 @@ food source of the insect
 * Mitchell studies have notes for some species, but no structured classification
 of interaction types.
 
----
-
-## Limitations
-
 * No information on the abundance or biomass of a given organism associated
 with each tree.
 
@@ -375,30 +522,87 @@ the interaction was recorded in.
 
 ---
 
-## How to contribute
-
-class: center, middle
+## From Trees to Communities
 
 .pull-left[
-![Github_GloBI](Images/Github_GloBI.JPG)
+
+![nvc_floristic_tables](Images/nvc_floristic_tables.JPG)
+
 ]
 
 .pull-right[
-![iNat_obs](Images/iNat_obs.JPG)
+
+![globi_search_structure](Images/globi_search_structure.png)
 ]
 
 ---
 
-## Next steps
+## Iteration 1
 
-* Attempt to get the authors of each of the datasets I have used to upload their
-data to GloBI.
+### NVC A1 - Lemna gibba community
 
-* Create a set of observation fields in iNaturalist which correspond directly to 
-the GloBI relations ontology.
+```{r nvc, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, out.width = "100%"}
 
-* Collate information from 'low-hanging fruits' in the literature (e.g. the BES
-Biological Flora of the British Isles Papers) for inclusion in GloBI.
+data <- read.csv("Output_Data/a1_assoc_spp.csv") |> 
+  dplyr::slice(-1)
+
+DT::datatable(
+  data,
+  fillContainer = FALSE, 
+  rownames = FALSE,
+  options = list(
+    pageLength = 10,
+    columnDefs = list(list(className = 'dt-center', targets="_all")),
+    headerCallback = DT::JS(
+      "function(thead) {",
+      "  $(thead).css('font-size', '0.5em');",
+      "}"
+      )
+    )
+  ) |> 
+  DT::formatStyle(columns = 1:ncol(data), fontSize = '50%')
+
+```
+
+---
+
+## Iteration 1
+
+### Rhopalosiphum nymphaeae eats Lemma gibba
+
+.pull-left[
+![waterlilly_aphid](Images/Rhopalosiphum nymphaeae eats Lemma gibba.JPG)
+]
+
+.pull-right[
+![waterlilly_aphid_globi](Images/Rhopalosiphum nymphaeae eats Lemma gibba GloBI.JPG)
+]
+
+---
+
+## Iteration 2
+
+### Ischidon scutellaris eats Rhopalosiphum nymphaeae
+
+.pull-left[
+![hover_fly](Images/Ischidon scutellaris.JPG)
+]
+
+.pull-right[
+![hoverfly_eats_aphid](Images/Ischidon scutellaris eats Rhopalosiphum nymphaeae.jpg)
+]
+
+---
+
+## How to contribute
+
+.pull-left[
+![github_globi](Images/Github_GloBI.JPG)
+]
+
+.pull-right[
+![inat_obs](Images/iNat_obs.JPG)
+]
 
 ---
 
@@ -408,17 +612,26 @@ Biological Flora of the British Isles Papers) for inclusion in GloBI.
 
 * Birks, H.J.B., 1980. British trees and insects: a test of the time hypothesis over the last 13,000 years. The American Naturalist, 115(4), pp.600-605.
 
+* Cooper, J. and Kirk, P., 2006. Fungal Records Database of Britain and Ireland. British Mycological Society.
+
 * Evans, H. F. (1987). Sitka spruce insects: past, present and future. Proceedings of the Royal Society of Edinburgh. Section B. Biological Sciences, 93(1-2), 157–167.
+
+* Humphrey, J.W., Ferris, R., Jukes, M. and Peace, A., 2001. Biodiversity in planted forests. Forest Research Annual Report and Accounts 2000–2001.
 
 * Kennedy, C.E.J. and Southwood, T.R.E., 1984. The number of species of insects associated with British trees: a re-analysis. The Journal of Animal Ecology, pp.455-478.
 
 * Mitchell, R.J., Broome, A., Harmer, R., Beaton, J.K., Bellamy, P.E., Brooker, R.W., Duncan, R., Ellis, C.J., Hester, A.J., Hodgetts, N.G. and Iason, G.R., 2014. Assessing and addressing the impacts of ash dieback on UK woodlands and trees of conservation importance (Phase 2).
 
+---
+
 * Mitchell, R.J., Bellamy, P.E., Ellis, C.J., Hewison, R.L., Hodgetts, N.G., Iason, G.R., Littlewood, N.A., Newey, S., Stockan, J.A. and Taylor, A.F.S., 2019. OakEcol: A database of Oak-associated biodiversity within the UK. Data in brief, 25, p.104120.
+
+* Poelen, J.H., Simons, J.D. and Mungall, C.J., 2014. Global biotic interactions: An open infrastructure to share and analyze species-interaction datasets. Ecological Informatics, 24, pp.148-159.
 
 * Simkin, J., 2012. The BLS database project. Br Lichen Soc Bull, 111, pp.8-14.
 
-* Southwood, T.R.E., 1961. The number of species of insect associated with various trees. The Journal of Animal Ecology, pp.1-8.
+* Smith, R.M. and Roy, D.B., 2008. Revealing the foundations of biodiversity: The database of British insects and their foodplants. British Wildlife, 20(1), pp.17-25.
 
+* Southwood, T.R.E., 1961. The number of species of insect associated with various trees. The Journal of Animal Ecology, pp.1-8.
 
 ---

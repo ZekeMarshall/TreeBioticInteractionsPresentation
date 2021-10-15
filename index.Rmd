@@ -209,7 +209,8 @@ data <- read.csv("Output_Data/species_time_data.csv")
 
 data_t <- data |> 
   dplyr::select(-Growing_Time, -Tree_group) |> 
-  tidyr::pivot_wider(id_cols = c(Species), values_from = Associated_Species, names_from = Taxon_group)
+  tidyr::pivot_wider(id_cols = c(Species), values_from = Associated_Species, names_from = Taxon_group) |> 
+  dplyr::select(Species, Bryophytes, Lichen, Fungi, Invertebrates, Birds, Mammals)
 
 DT::datatable(
   data_t,
@@ -239,6 +240,20 @@ DT::datatable(
 
 data <- read.csv("Output_Data/species_time_data.csv") |> 
  dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
+
+data$Taxon_group <- factor(data$Taxon_group,                                
+                           levels = c("Bryophytes", 
+                                      "Lichen", 
+                                      "Fungi", 
+                                      "Invertebrates",
+                                      "Birds",
+                                      "Mammals"))
+
+data$Tree_group <- factor(data$Tree_group,                                
+                          levels = c("Forestry conifers", 
+                                     "Forestry broadleaves", 
+                                     "Introduced", 
+                                     "Native"))
 
 
 mult <- c(1, 1.03, 1.06, 1.09, 1.12, 1.17)
@@ -322,28 +337,19 @@ box
 data <- read.csv("Output_Data/species_time_data.csv") #|> 
   # dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
 
-# Models for data grouped by tree group
-modelsG <- data |> 
-  dplyr::group_by(Taxon_group, Tree_group) |> 
-  dplyr::summarise(model = list(stats::lm(log10(Associated_Species) ~ log10(Growing_Time))))
+data$Taxon_group <- factor(data$Taxon_group,                                
+                           levels = c("Bryophytes", 
+                                      "Lichen", 
+                                      "Fungi", 
+                                      "Invertebrates",
+                                      "Birds",
+                                      "Mammals"))
 
-modelsG_summary <- data.frame(Taxon_group = modelsG$Taxon_group, Tree_group = modelsG$Tree_group) |> 
-  cbind(purrr::map_df(modelsG$model, broom::glance))
-
-# Models for data ungrouped by tree group
-models <- data |> 
-  dplyr::group_by(Taxon_group) |> 
-  dplyr::summarise(model = list(stats::lm(log10(Associated_Species) ~ log10(Growing_Time))))
-
-models_summary <- data.frame(Taxon_group = models$Taxon_group) |> 
-  cbind(purrr::map_df(models$model, broom::glance))
-
-# r2_annot_total <- data.frame(
-#   label = c(paste("R2: ", round(models_summary$r.squared, 2))),
-#   Taxon_group = c(models_summary$Taxon_group)
-# )
-
-# formula <- y ~ x
+data$Tree_group <- factor(data$Tree_group,                                
+                          levels = c("Forestry conifers", 
+                                     "Forestry broadleaves", 
+                                     "Introduced", 
+                                     "Native"))
 
 species_time_plot <- ggplot2::ggplot(data,
                                      mapping = ggplot2::aes(x = Growing_Time,

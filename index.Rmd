@@ -176,7 +176,7 @@ DT::datatable(
   fillContainer = FALSE,
   rownames = FALSE,
   options = list(
-    dom = 'tip',
+    dom = 't',
     pageLength = 12,
     columnDefs = list(list(className = 'dt-center', targets="_all")),
     headerCallback = DT::JS(
@@ -310,7 +310,7 @@ box
 
 ## The Species-Time Relationship
 
-```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, out.width="100%", fig.align='center'}
+```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, fig.align='center'}
 
 data <- read.csv("Output_Data/species_time_data.csv") #|> 
   # dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)

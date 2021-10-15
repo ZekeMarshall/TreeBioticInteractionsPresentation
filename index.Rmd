@@ -506,13 +506,12 @@ the interaction was recorded in.
 
 .pull-left[
 
-* Iteratively query GloBI for species in each community using the floristic tables
+* Query GloBI for species recorded as interacting with each plant species
+in each NVC community using the floristic tables
 
-* Create and ecological network for each NVC community
+* Iteratively query GloBI to create an ecological network for each NVC community
 
 * Compare these networks to networks for plantation forests
-
-$$\\[0.225in]$$
 
 ![nvc_floristic_tables](Images/nvc_floristic_tables.JPG)
 

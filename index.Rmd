@@ -589,7 +589,7 @@ DT::datatable(
 ### Ischidon scutellaris eats Rhopalosiphum nymphaeae
 
 .pull-left[
-![hover_fly](Images/Ischidon scutellaris.JPG)
+![hover_fly](Images/Ischidon scutellaris.jpg)
 ]
 
 .pull-right[

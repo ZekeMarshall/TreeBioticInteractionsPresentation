@@ -42,7 +42,7 @@ correlated to the length of time that species has been present in Britain.
 
 * Identify under-studied tree species.
 
-* Identify obligate organisms.
+* Identify organisms which have only one interaction recorded with a tree.
 
 ---
 
@@ -101,9 +101,9 @@ knitr::include_graphics(path = "Images/Alexander_2006_R.JPG")
 
 ## Relevance
 
-* Analysing species occurrences doesn't explicitly tell us why a species is present in a habitat.
-
 * Help assess the biodiversity value of native vs non-native trees & woodlands.
+
+* Analysing species occurrences doesn't explicitly tell us why a species is present in a habitat.
 
 * Analysing species interactions may help us to predict the species which can be supported in 
 heavily modified, human-dominated ecosystems.

@@ -15,6 +15,13 @@ output:
       ratio: '16:9'
 ---
 
+<style>
+p.caption {
+  font-size: 0.6em;
+  font-style: italic;
+}
+</style>
+
 ```{r xaringanExtra, echo = FALSE}
 xaringanExtra::use_progress_bar(color = "#415E3E", location = "top")
 ```
@@ -310,7 +317,7 @@ box
 
 ## The Species-Time Relationship
 
-```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, fig.align='center'}
+```{r species_time, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, fig.align='center', fig.cap=paste("Please refresh page if the figure doesn't render correctly - will correct asap!")}
 
 data <- read.csv("Output_Data/species_time_data.csv") #|> 
   # dplyr::mutate_if(is.numeric, tidyr::replace_na, 0)
@@ -401,6 +408,12 @@ species_time_plot <- ggplot2::ggplot(data,
   
   ggplot2::theme(
     
+    axis.text.x = ggplot2::element_text(size = 7, color = "black"),
+    axis.title.x = ggplot2::element_text(size = 9, color = "black"),
+    
+    axis.text.y = ggplot2::element_text(size = 7, color = "black"),
+    axis.title.y = ggplot2::element_text(size = 9, color = "black"),
+    
     panel.background =  ggplot2::element_rect(fill='transparent'),
     plot.background =  ggplot2::element_rect(fill='transparent', color = NA),
     
@@ -423,7 +436,7 @@ species_time_plot <- ggplot2::ggplot(data,
 
 
 species_time_plotly <- plotly::ggplotly(species_time_plot,
-                                        width = 1000,
+                                        width = 980,
                                         height = 450,
                                         tooltip = c("Species", "Tree_group",
                                                     "Growing_Time", "Associated_Species")
@@ -436,7 +449,7 @@ species_time_plotly[['x']][['layout']][['annotations']][[1]][['y']] <- -0.045
 
 # Adjust y axis plotly labels
 species_time_plotly[['x']][['layout']][['annotations']][[2]][['y']] <- 0.5
-species_time_plotly[['x']][['layout']][['annotations']][[2]][['x']] <- -0.045
+species_time_plotly[['x']][['layout']][['annotations']][[2]][['x']] <- -0.0375
 
 
 widgetframe::frameWidget(species_time_plotly)

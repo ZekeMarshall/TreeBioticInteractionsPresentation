@@ -552,7 +552,19 @@ $$\\[0.25in]$$
 ```{r nvc, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, out.width = "100%"}
 
 data <- read.csv("Output_Data/a1_assoc_spp.csv") |> 
-  dplyr::slice(-1)
+  dplyr::slice(-1) |> 
+  dplyr::select(Community.or.sub.community.code,
+                Species.constancy.value,
+                Maximum.abundance.of.species,
+                NVC_Species,
+                Assoc_Species,
+                interactionTypeName) |> 
+  magrittr::set_colnames(c("Code",
+                           "Species constancy",
+                           "Maximum Abundance",
+                           "NVC Species",
+                           "Associated Species",
+                           "Interaction Type"))
 
 DT::datatable(
   data,
@@ -592,14 +604,14 @@ DT::datatable(
 
 ## Iteration 1
 
-```{r network, echo=FALSE, message=FALSE, warning=FALSE, dpi=1000}
+```{r network, echo=FALSE, message=FALSE, warning=FALSE, dpi=1500}
 
 data <- read.csv("Output_Data/a1_assoc_spp.csv") |> 
   dplyr::slice(-1)
 
-nvc_spp <- unique(data$NVC.species)
+nvc_spp <- unique(data$NVC_Species)
 
-assoc_spp <- unique(data$Associated.species)
+assoc_spp <- unique(data$Assoc_Species)
 
 spp <- c(nvc_spp, assoc_spp)
 
@@ -607,7 +619,7 @@ nodes <- data.frame("id" = spp) |>
   dplyr::mutate(
     group = dplyr::case_when(
       id %in% nvc_spp ~ "NVC",
-      id %in% assoc_spp ~ "eats",
+      id %in% assoc_spp ~ "Assoc",
       TRUE ~ as.character(id)
       )
     ) |> 
@@ -616,8 +628,11 @@ nodes <- data.frame("id" = spp) |>
   dplyr::distinct()
 
 edges <- data |> 
-  dplyr::select(NVC.species, Associated.species) |> 
-  magrittr::set_colnames(c("from", "to"))
+  dplyr::select(NVC_Species, Assoc_Species, interactionTypeName) |>
+  dplyr::mutate("label" = interactionTypeName) |>
+  magrittr::set_colnames(c("from", "to", "title", "label"))
+
+
 
 set.seed(12)
 
@@ -627,9 +642,13 @@ foo <- visNetwork::visNetwork(nodes, edges) |>
   
   visNetwork::visGroups(groupname = "NVC", color = "#70e858", alpha = 0.5) |> 
 
-  visNetwork::visGroups(groupname = "eats", color = "#f75b40", alpha = 0.5) |> 
+  visNetwork::visGroups(groupname = "Assoc", color = "#f75b40", alpha = 0.5) |> 
 
-  visNetwork::visEdges(smooth = FALSE) |> 
+  visNetwork::visEdges(smooth = FALSE, 
+                       arrows = "from",
+                       color = "grey",
+                       selectionWidth = 0,
+                       ) |> 
   visNetwork::visPhysics(solver = "barnesHut",
                          stabilization = TRUE) |> 
   visNetwork::visIgraphLayout()

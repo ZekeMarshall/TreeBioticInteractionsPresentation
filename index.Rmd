@@ -602,7 +602,21 @@ DT::datatable(
 
 ---
 
-## Iteration 1
+## Iteration 2
+
+### Ischidon scutellaris eats Rhopalosiphum nymphaeae
+
+.pull-left[
+![hover_fly](Images/Ischidon scutellaris.jpg)
+]
+
+.pull-right[
+![hoverfly_eats_aphid](Images/Ischidon scutellaris eats Rhopalosiphum nymphaeae.jpg)
+]
+
+---
+
+## Network
 
 ```{r network, echo=FALSE, message=FALSE, warning=FALSE, dpi=1500}
 
@@ -619,18 +633,26 @@ nodes <- data.frame("id" = spp) |>
   dplyr::mutate(
     group = dplyr::case_when(
       id %in% nvc_spp ~ "NVC",
-      id %in% assoc_spp ~ "Assoc",
+      id %in% assoc_spp ~ "Iteration 1",
       TRUE ~ as.character(id)
       )
     ) |> 
   dplyr::mutate("label" = id,
-                "title" = paste0("<b>", id,"</b>")) |> # <h5>Fifth-Order</h5>
-  dplyr::distinct()
+                "title" = paste0("<b>", id,"</b>")) |>
+  dplyr::distinct() |> 
+  dplyr::add_row(id = "Ischidon scutellaris",
+                 label = "Ischidon scutellaris",
+                 title = paste0("<b>", "Ischidon scutellaris","</b>"),
+                 group = "Iteration 2")
 
 edges <- data |> 
   dplyr::select(NVC_Species, Assoc_Species, interactionTypeName) |>
   dplyr::mutate("label" = interactionTypeName) |>
-  magrittr::set_colnames(c("from", "to", "title", "label"))
+  magrittr::set_colnames(c("from", "to", "title", "label")) |> 
+  dplyr::add_row(from = "Ischidon scutellaris",
+                 to = "Rhopalosiphum nymphaeae",
+                 title = "eats",
+                 label = "eats")
 
 
 
@@ -640,9 +662,11 @@ foo <- visNetwork::visNetwork(nodes, edges) |>
   visNetwork::visOptions(highlightNearest = TRUE,
                          nodesIdSelection = list(enabled = TRUE, selected = "Rhopalosiphum nymphaeae")) |> 
   
-  visNetwork::visGroups(groupname = "NVC", color = "#70e858", alpha = 0.5) |> 
+  visNetwork::visGroups(groupname = "NVC", color = "#00b159", alpha = 0.5) |> 
 
-  visNetwork::visGroups(groupname = "Assoc", color = "#f75b40", alpha = 0.5) |> 
+  visNetwork::visGroups(groupname = "Iteration 1", color = "#f3a02a", alpha = 0.5) |> 
+  
+  visNetwork::visGroups(groupname = "Iteration 2", color = "#d11142", alpha = 0.5) |>
 
   visNetwork::visEdges(smooth = FALSE, 
                        arrows = "from",
@@ -656,20 +680,6 @@ foo <- visNetwork::visNetwork(nodes, edges) |>
 widgetframe::frameWidget(foo)
 
 ```
-
----
-
-## Iteration 2
-
-### Ischidon scutellaris eats Rhopalosiphum nymphaeae
-
-.pull-left[
-![hover_fly](Images/Ischidon scutellaris.jpg)
-]
-
-.pull-right[
-![hoverfly_eats_aphid](Images/Ischidon scutellaris eats Rhopalosiphum nymphaeae.jpg)
-]
 
 ---
 

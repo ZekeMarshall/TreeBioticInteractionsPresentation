@@ -659,7 +659,8 @@ edges <- data |>
 set.seed(12)
 
 foo <- visNetwork::visNetwork(nodes, edges) |> 
-  visNetwork::visOptions(highlightNearest = TRUE,
+  visNetwork::visOptions(selectedBy = "group", 
+                         highlightNearest = TRUE,
                          nodesIdSelection = list(enabled = TRUE, selected = "Rhopalosiphum nymphaeae")) |> 
   
   visNetwork::visGroups(groupname = "NVC", color = "#00b159", alpha = 0.5) |> 

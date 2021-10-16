@@ -578,7 +578,7 @@ DT::datatable(
 
 ## Iteration 1
 
-### Rhopalosiphum nymphaeae eats Lemma gibba
+### Rhopalosiphum nymphaeae eats Lemna gibba
 
 .pull-left[
 ![waterlilly_aphid](Images/Rhopalosiphum nymphaeae eats Lemma gibba.JPG)
@@ -587,6 +587,56 @@ DT::datatable(
 .pull-right[
 ![waterlilly_aphid_globi](Images/Rhopalosiphum nymphaeae eats Lemma gibba GloBI.JPG)
 ]
+
+---
+
+## Iteration 1
+
+```{r network, echo=FALSE, message=FALSE, warning=FALSE, dpi=1000}
+
+data <- read.csv("Output_Data/a1_assoc_spp.csv") |> 
+  dplyr::slice(-1)
+
+nvc_spp <- unique(data$NVC.species)
+
+assoc_spp <- unique(data$Associated.species)
+
+spp <- c(nvc_spp, assoc_spp)
+
+nodes <- data.frame("id" = spp) |> 
+  dplyr::mutate(
+    group = dplyr::case_when(
+      id %in% nvc_spp ~ "NVC",
+      id %in% assoc_spp ~ "eats",
+      TRUE ~ as.character(id)
+      )
+    ) |> 
+  dplyr::mutate("label" = id,
+                "title" = paste0("<b>", id,"</b>")) |> # <h5>Fifth-Order</h5>
+  dplyr::distinct()
+
+edges <- data |> 
+  dplyr::select(NVC.species, Associated.species) |> 
+  magrittr::set_colnames(c("from", "to"))
+
+set.seed(12)
+
+foo <- visNetwork::visNetwork(nodes, edges) |> 
+  visNetwork::visOptions(highlightNearest = TRUE,
+                         nodesIdSelection = list(enabled = TRUE, selected = "Rhopalosiphum nymphaeae")) |> 
+  
+  visNetwork::visGroups(groupname = "NVC", color = "#70e858", alpha = 0.5) |> 
+
+  visNetwork::visGroups(groupname = "eats", color = "#f75b40", alpha = 0.5) |> 
+
+  visNetwork::visEdges(smooth = FALSE) |> 
+  visNetwork::visPhysics(solver = "barnesHut",
+                         stabilization = TRUE) |> 
+  visNetwork::visIgraphLayout()
+
+widgetframe::frameWidget(foo)
+
+```
 
 ---
 

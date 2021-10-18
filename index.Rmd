@@ -547,7 +547,7 @@ $$\\[0.25in]$$
 
 ## Iteration 1
 
-### NVC A1 - Lemna gibba community
+### NVC A1 - Lemna gibba community (minimal example)
 
 ```{r nvc, echo=FALSE, warning=FALSE, cache=FALSE, message=FALSE, out.width = "100%"}
 
@@ -621,7 +621,8 @@ DT::datatable(
 ```{r network, echo=FALSE, message=FALSE, warning=FALSE, dpi=1500}
 
 data <- read.csv("Output_Data/a1_assoc_spp.csv") |> 
-  dplyr::slice(-1)
+  dplyr::slice(-1) |> 
+  dplyr::filter(!is.na(Assoc_Species))
 
 nvc_spp <- unique(data$NVC_Species)
 
@@ -649,19 +650,21 @@ edges <- data |>
   dplyr::select(NVC_Species, Assoc_Species, interactionTypeName) |>
   dplyr::mutate("label" = interactionTypeName) |>
   magrittr::set_colnames(c("from", "to", "title", "label")) |> 
-  dplyr::add_row(from = "Ischidon scutellaris",
-                 to = "Rhopalosiphum nymphaeae",
+  dplyr::add_row(from = "Rhopalosiphum nymphaeae",
+                 to = "Ischidon scutellaris",
                  title = "eats",
                  label = "eats")
 
 
 
-set.seed(12)
+set.seed(18)
 
 foo <- visNetwork::visNetwork(nodes, edges) |> 
   visNetwork::visOptions(selectedBy = "group", 
                          highlightNearest = TRUE,
                          nodesIdSelection = list(enabled = TRUE, selected = "Rhopalosiphum nymphaeae")) |> 
+  
+  visNetwork::visEvents(type = "once", startStabilizing = "function() {this.moveTo({scale:0.3})}") |> 
   
   visNetwork::visGroups(groupname = "NVC", color = "#00b159", alpha = 0.5) |> 
 
@@ -693,6 +696,17 @@ widgetframe::frameWidget(foo)
 .pull-right[
 ![inat_obs](Images/iNat_obs.JPG)
 ]
+
+---
+
+## Next Steps
+
+* Manual data entry from the literature for GloBI
+
+* Add epiphytic and parasitic plants, along with other taxa such as slime molds
+
+* Searching for additional data on other invertebrate taxa
+
 
 ---
 
@@ -729,5 +743,3 @@ widgetframe::frameWidget(foo)
 class: center, middle
 
 ## Comments, Questions, and Suggestions!
-
----
